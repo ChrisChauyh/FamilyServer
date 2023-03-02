@@ -57,7 +57,7 @@ public class UserDao {
      * @throws DataAccessException
      */
 
-    boolean validate(String username)throws DataAccessException {
+    public boolean validate(String username)throws DataAccessException {
         String sql = "SELECT * FROM User WHERE username = ?;";
         try(PreparedStatement stmt = conn.prepareStatement(sql))
         {

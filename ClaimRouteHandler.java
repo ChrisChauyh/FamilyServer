@@ -80,10 +80,10 @@ class ClaimRouteHandler implements HttpHandler {
 						// TODO: Claim a route based on the request data
 
 						/*
-						LoginRequest request = (LoginRequest)gson.fromJson(reqData, LoginRequest.class);
+						RegisterRequest request = (RegisterRequest)gson.fromJson(reqData, RegisterRequest.class);
 
-						LoginService service = new LoginService();
-						LoginResult result = service.login(request);
+						RegisterService service = new RegisterService();
+						RegisterResult result = service.register(request);
 
 						exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 						OutputStream resBody = exchange.getResponseBody();

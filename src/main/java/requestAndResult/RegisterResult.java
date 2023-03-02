@@ -1,13 +1,11 @@
 package requestAndResult;
 
-import handlers.RegisterHandler;
-
 /**
  * pass out register results
  *
  */
 
-public class RegisterResult extends RegisterHandler {
+public class RegisterResult {
     /**
      *     status of success
      */
@@ -18,6 +16,17 @@ public class RegisterResult extends RegisterHandler {
      *     output messages
      */
     private String message;
+
+
+    private void successMessage()
+    {
+
+    }
+
+    private void failMessage()
+    {
+
+    }
 
     public Boolean getSucccess() {
         return isSucccess;

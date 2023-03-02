@@ -74,31 +74,27 @@ public class Server {
         // When the HttpServer receives an HTTP request containing the
         // "/games/list" URL path, it will forward the request to ListGamesHandler
         // for processing.
+        server.createContext("/", new FileHandler());
         server.createContext("/user/register", new RegisterHandler());
         server.createContext("/user/login", new LoginHandler());
         server.createContext("/clear", new ClearHandler());
         server.createContext("/fill", new FillHandler());
         server.createContext("/load", new LoadHandler());
         server.createContext("/person", new PersonHandler());
+        //one more
         server.createContext("/event", new EventHandler());
+        // onr more
 
         // Create and install the HTTP handler for the "/routes/claim" URL path.
         // When the HttpServer receives an HTTP request containing the
         // "/routes/claim" URL path, it will forward the request to ClaimRouteHandler
         // for processing.
-        server.createContext("/routes/claim", new EventHandler());
 
         // Create and install the "default" (or "file") HTTP handler.
         // All requests that do not match the other handler URLs
         // will be passed to this handle.
         // These are requests to download a file from the server
-        // (e.g., web site files)
-
-
-        /**
-         * will write this code later
-         server.createContext("/", new FileHandler());
-         */
+        // (e.g., web site files
 
         // Log message indicating that the HttpServer is about the start accepting
         // incoming client connections.

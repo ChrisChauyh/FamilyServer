@@ -14,7 +14,7 @@ public class AuthTokenDao {
         this.conn = conn;
     }
 
-    String getUserbyTokens(String token) throws DataAccessException {
+    public String getUserbyTokens(String token) throws DataAccessException {
         String username;
         ResultSet rs;
         String sql = "SELECT * FROM Authtoken WHERE authtoken = ?;";
@@ -33,7 +33,7 @@ public class AuthTokenDao {
         }
     }
 
-    String generateToken(String username) throws DataAccessException {
+    public String generateToken(String username) throws DataAccessException {
         //generate Tokens based on the username
         String sql = "INSERT INTO AUTHTOKEN (authtoken, username) VALUES(?,?)";
         String token = UUID.randomUUID().toString();
