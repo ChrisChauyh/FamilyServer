@@ -1,16 +1,45 @@
 package model;
 
 import java.util.Objects;
-
+/**
+ * an object representing an event
+ */
 public class Event {
+    /**
+     *unique event ID
+     */
     private String eventID;
+    /**
+     *this event belongs to the user
+     */
     private String associatedUsername;
+    /**
+     *the person's ID
+     */
     private String personID;
+    /**
+     *location latitude
+     */
     private Float latitude;
+    /**
+     *location longitude
+     */
     private Float longitude;
+    /**
+     *this event's country
+     */
     private String country;
+    /**
+     *this event's city
+     */
     private String city;
+    /**
+     *what type is this
+     */
     private String eventType;
+    /**
+     *what year
+     */
     private Integer year;
 
     public Event(String eventID, String username, String personID, Float latitude, Float longitude,
@@ -98,6 +127,11 @@ public class Event {
         this.year = year;
     }
 
+    /**
+     * chack two objects if they are equal or not
+     * @param o to compare
+     * @return return a boolean to show if it is equal or not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,6 +139,10 @@ public class Event {
         Event event = (Event) o;
         return Objects.equals(eventID, event.eventID) && Objects.equals(associatedUsername, event.associatedUsername) && Objects.equals(personID, event.personID) && Objects.equals(latitude, event.latitude) && Objects.equals(longitude, event.longitude) && Objects.equals(country, event.country) && Objects.equals(city, event.city) && Objects.equals(eventType, event.eventType) && Objects.equals(year, event.year);
     }
+    /**
+     * sinple hascode method
+     * @return hash for an object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(eventID, associatedUsername, personID, latitude, longitude, country, city, eventType, year);

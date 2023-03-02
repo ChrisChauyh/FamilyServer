@@ -2,16 +2,50 @@ package model;
 
 import java.util.Objects;
 
+/**
+ * a class representing a person
+ *
+ */
 public class Person {
+    /**
+     *the id refer to a user
+     */
     private String personID;
-    private String associatedUsername;
-    private String firstName;
-    private String lastName;
-    private String gender;
-    private String fatherID;
-    private String motherID;
-    private String spouseID;
+    /**
+     *the username that this person associated to
+     */
 
+    private String associatedUsername;
+    /**
+     *this person's first name
+     */
+
+    private String firstName;
+    /**
+     *this person's lastname
+     */
+
+    private String lastName;
+    /**
+     *
+     */
+    //this person's gender
+    private String gender;
+    /**
+     *this person's fatherID
+     */
+    private String fatherID;
+    /**
+     *this person's mother ID
+     */
+    private String motherID;
+    /**
+     *this person's spouse ID
+     */
+    private String spouseID;
+    /**
+     * Create constructor for the whole person object
+     */
     public Person(String personID, String associatedUsername, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;
         this.associatedUsername = associatedUsername;
@@ -87,6 +121,11 @@ public class Person {
         this.spouseID = spouseID;
     }
 
+    /**
+     * chack two objects if they are equal or not
+     * @param o to compare
+     * @return return a boolean to show if it is equal or not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,7 +133,10 @@ public class Person {
         Person person = (Person) o;
         return personID.equals(person.personID) && associatedUsername.equals(person.associatedUsername) && firstName.equals(person.firstName) && lastName.equals(person.lastName) && gender.equals(person.gender) && Objects.equals(fatherID, person.fatherID) && Objects.equals(motherID, person.motherID) && Objects.equals(spouseID, person.spouseID);
     }
-
+    /**
+     * sinple hascode method
+     * @return hash for an object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(personID, associatedUsername, firstName, lastName, gender, fatherID, motherID, spouseID);

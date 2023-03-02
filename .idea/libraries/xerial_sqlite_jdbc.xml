@@ -5,6 +5,8 @@
       <root url="jar://$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.40.1.0/sqlite-jdbc-3.40.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/sqlite-jdbc-3.40.1.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

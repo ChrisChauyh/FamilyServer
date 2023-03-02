@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS "Event" (
 	"city"	VARCHAR(30) NOT NULL,
 	"eventType"	VARCHAR(30) NOT NULL,
 	"year"	INT(4) NOT NULL,
-	PRIMARY KEY("personID")
+	PRIMARY KEY("eventID")
 );
-CREATE TABLE IF NOT EXISTS "Authtoken" (
+CREATE TABLE IF NOT EXISTS "Authtokens" (
 	"authtoken"	VARCHAR(30) NOT NULL,
 	"username"	VARCHAR(30) NOT NULL,
 	PRIMARY KEY("authtoken")

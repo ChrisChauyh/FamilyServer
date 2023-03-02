@@ -1,5 +1,4 @@
-package DataAccess;
-
+package dataAccess;
 
 import model.Event;
 
@@ -7,19 +6,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
-public class EventDAO {
+public class EventDao {
     private final Connection conn;
 
-    public EventDAO(Connection conn) {
+    public EventDao(Connection conn) {
         this.conn = conn;
     }
+
 
     public void insert(Event event) throws DataAccessException {
         //We can structure our string to be similar to a sql command, but if we insert question
         //marks we can change them later with help from the statement
-        String sql = "INSERT INTO Events (EventID, AssociatedUsername, PersonID, Latitude, Longitude, " +
+        String sql = "INSERT INTO Event (eventID, AssociatedUsername, PersonID, Latitude, Longitude, " +
                 "Country, City, EventType, Year) VALUES(?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
@@ -45,7 +46,7 @@ public class EventDAO {
     public Event find(String eventID) throws DataAccessException {
         Event event;
         ResultSet rs;
-        String sql = "SELECT * FROM Events WHERE EventID = ?;";
+        String sql = "SELECT * FROM Event WHERE EventID = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, eventID);
             rs = stmt.executeQuery();
@@ -56,7 +57,7 @@ public class EventDAO {
                         rs.getInt("Year"));
                 return event;
             } else {
-                return null;
+                throw new SQLException();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,38 +65,49 @@ public class EventDAO {
         }
 
     }
-    public List<Event> findforUser(String username)
-    {
-        List<Event> events = null;
-        //pass in username, will grab alll event objects and return all events
-        //sql select statements
-        return events;
 
-    }
-
-    public List<Event> findforYear(Integer year)
-    {
-        //find a list of person based on year.
-        List<Event> events = null;
-        return events;
-    }
-
-    public List<Event> findforCountry(String country)
-    {
-        //find a list of person based on country.
-        List<Event> events = null;
-        return events;
-    }
-
-
-
-    public void clearEvents() throws DataAccessException {
-        String sql = "DELETE FROM Events";
+    public void clear() throws DataAccessException {
+        String sql = "DELETE FROM Event";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while clearing the event table");
+        }
+    }
+    public List<Event> findallEvents(String personID) throws DataAccessException{
+        Event event;
+        ResultSet rs;
+        List<Event> all = new LinkedList<Event>();
+        String sql = "SELECT * FROM Event WHERE personID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            rs = stmt.executeQuery();
+            if(!rs.next()) {
+                throw new SQLException();
+            }
+            while(rs.next()) {
+                event = new Event(rs.getString("EventID"), rs.getString("AssociatedUsername"),
+                        rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
+                        rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
+                        rs.getInt("Year"));
+                all.add(event);
+            }
+            return all;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding all events in the database");
+        }
+    }
+    public void clearsingle(String eventID) throws DataAccessException {
+        String sql = "DELETE FROM Event WHERE eventID = ?;";
+        try(PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setString(1,eventID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearning an event in the database");
         }
     }
 }

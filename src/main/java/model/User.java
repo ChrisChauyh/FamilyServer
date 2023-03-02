@@ -1,14 +1,40 @@
 package model;
 
 import java.util.Objects;
+/**
+ * a class representating user
+ */
 
 public class User {
+    /**
+     *     username
+     */
+
     private String username;
+    /**
+     *     password
+     */
     private String password;
+    /**
+     *     email
+     */
     private String email;
+    /**
+     *     user's firstname
+     */
     private String firstName;
+    /**
+     *     user's lastname
+     */
     private String lastName;
+    /**
+     *     user's gender
+     */
     private String gender;
+    /**
+     *     a unique personID for the user
+     */
+
     private String personID;
 
     public User(String username, String password, String email, String firstName, String lastName, String gender, String personID) {
@@ -77,6 +103,11 @@ public class User {
         this.personID = personID;
     }
 
+    /**
+     * chack two objects if they are equal or not
+     * @param o to compare
+     * @return return a boolean to show if it is equal or not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,6 +116,10 @@ public class User {
         return username.equals(user.username) && password.equals(user.password) && email.equals(user.email) && firstName.equals(user.firstName) && lastName.equals(user.lastName) && gender.equals(user.gender) && personID.equals(user.personID);
     }
 
+    /**
+     * sinple hascode method
+     * @return hash for an object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(username, password, email, firstName, lastName, gender, personID);

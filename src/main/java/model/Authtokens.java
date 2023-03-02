@@ -1,11 +1,25 @@
 package model;
 
 import java.util.Objects;
+/**
+ * a class for authentication Token
+ */
 
 public class Authtokens {
-private String authtoken;
-private String username;
+    /**
+     * the unique token that user has
+     */
 
+private String authtoken;
+    /**
+     *  the associated username
+     */
+private String username;
+    /**
+     * create constructor for authtoken and username
+     * @param authtoken
+     * @param username
+     */
     public Authtokens(String authtoken, String username) {
         this.authtoken = authtoken;
         this.username = username;
@@ -27,6 +41,11 @@ private String username;
         this.username = username;
     }
 
+    /**
+     * chack two objects if they are equal or not
+     * @param o to compare
+     * @return return a boolean to show if it is equal or not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,7 +53,10 @@ private String username;
         Authtokens that = (Authtokens) o;
         return authtoken.equals(that.authtoken) && username.equals(that.username);
     }
-
+    /**
+     * sinple hascode method
+     * @return hash for an object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(authtoken, username);
