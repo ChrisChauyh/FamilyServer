@@ -18,7 +18,7 @@ public class FileHandler implements HttpHandler {
             if (exchange.getRequestMethod().toLowerCase().equals("get")) {
 
                 String url = exchange.getRequestURI().toString();
-                if(url == "/" || url == null || url == "")
+                if(url.equals("/") ||  url.equals(""))
                 {
                     url = "/index.html";
                 }
@@ -27,11 +27,13 @@ public class FileHandler implements HttpHandler {
                 if(!file.exists())
                 {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
-                    exchange.getResponseBody().close();
+                    file = new File("web/HTML/404.html");
+                }
+                else{
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,0);
                 }
                 OutputStream respBody = exchange.getResponseBody();
                 Files.copy(Path.of(file.getPath()), respBody);
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 exchange.getResponseBody().close();
                 success = true;
             }
