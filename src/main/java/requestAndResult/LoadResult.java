@@ -2,16 +2,8 @@ package requestAndResult;
 
 public class LoadResult {
     //objects to json
-    private Boolean isSucccess;
     private String message;
-
-    public Boolean getSucccess() {
-        return isSucccess;
-    }
-
-    public void setSucccess(Boolean succcess) {
-        isSucccess = succcess;
-    }
+    private Boolean success;
 
     public String getMessage() {
         return message;
@@ -19,5 +11,13 @@ public class LoadResult {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }

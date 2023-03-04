@@ -87,7 +87,8 @@ public class PersonDao {
     }
 
 //clear all person from server
-    public void clear() throws DataAccessException
+    public void
+    clear() throws DataAccessException
     {//clear all person
         String sql = "DELETE FROM Person;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

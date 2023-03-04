@@ -1,16 +1,9 @@
 package requestAndResult;
 
 public class ClearResult {
-    private Boolean isSuccess;
+
     private String message;
-
-    public Boolean getSuccess() {
-        return isSuccess;
-    }
-
-    public void setSuccess(Boolean success) {
-        isSuccess = success;
-    }
+    private Boolean success;
 
     public String getMessage() {
         return message;
@@ -18,5 +11,13 @@ public class ClearResult {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }

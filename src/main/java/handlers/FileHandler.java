@@ -47,11 +47,9 @@ public class FileHandler implements HttpHandler {
         {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
 
-            // We are not sending a response body, so close the response body
-            // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
 
-            // Display/log the stack trace
+
             e.printStackTrace();
 
         }

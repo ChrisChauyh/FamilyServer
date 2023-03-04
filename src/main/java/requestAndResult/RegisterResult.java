@@ -11,30 +11,8 @@ public class RegisterResult {
      */
 
 
-    private Boolean isSucccess;
-    /**
-     *     output messages
-     */
     private String message;
-
-
-    private void successMessage()
-    {
-
-    }
-
-    private void failMessage()
-    {
-
-    }
-
-    public Boolean getSucccess() {
-        return isSucccess;
-    }
-
-    public void setSucccess(Boolean succcess) {
-        isSucccess = succcess;
-    }
+    private Boolean success;
 
     public String getMessage() {
         return message;
@@ -42,5 +20,13 @@ public class RegisterResult {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }
