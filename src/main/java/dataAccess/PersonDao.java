@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDao {
@@ -36,8 +36,28 @@ public class PersonDao {
         }
 
     }
-
-    Person find(String personID) throws DataAccessException
+//    String findPersonIDbyUsername(String username) throws DataAccessException
+//    {
+//        ResultSet rs;
+//        String sql = "SELECT * FROM Person WHERE username = ?;";
+//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+//            stmt.setString(1, username);
+//            rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                person = new Person(rs.getString("personID"),
+//                        rs.getString("associatedUsername"),rs.getString("firstName"),
+//                        rs.getString("lastName"),rs.getString("gender"),
+//                        rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
+//                return person;
+//            } else {
+//                throw new SQLException();
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw new DataAccessException("Error encountered while finding the username in the database");
+//        }
+//    }
+    public Person find(String personID) throws DataAccessException
     {
         Person person;
         ResultSet rs;
@@ -56,7 +76,31 @@ public class PersonDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding an event in the database");
+            throw new DataAccessException("Error encountered while finding a person in the database");
+        }
+    }
+
+
+    public Person findpersonID(String personID) throws DataAccessException
+    {
+        Person person;
+        ResultSet rs;
+        String sql = "SELECT * FROM Person WHERE personID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                person = new Person(rs.getString("personID"),
+                        rs.getString("associatedUsername"),rs.getString("firstName"),
+                        rs.getString("lastName"),rs.getString("gender"),
+                        rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
+                return person;
+            } else {
+                throw new SQLException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding a person in the database");
         }
     }
 
@@ -64,20 +108,25 @@ public class PersonDao {
         //find all person that a user has
         Person person;
         ResultSet rs;
-        List<Person> all = new LinkedList<>();
+        List<Person> all = new ArrayList<>();
         String sql = "SELECT * FROM Person WHERE associatedUsername = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
             rs = stmt.executeQuery();
-            if(!rs.next()) {
-                throw new SQLException();
+            boolean stop = false;
+            while(stop == false) {
+                if(rs.next()){
+                    person = new Person(rs.getString("personID"),
+                            rs.getString("associatedUsername"),rs.getString("firstName"),
+                            rs.getString("lastName"),rs.getString("gender"),
+                            rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
+                    all.add(person);
+                }else{
+                    stop = true;
+                }
             }
-            while(rs.next()) {
-                person = new Person(rs.getString("personID"),
-                        rs.getString("associatedUsername"),rs.getString("firstName"),
-                        rs.getString("lastName"),rs.getString("gender"),
-                        rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
-                all.add(person);
+            if (all.size() <1) {
+                throw new SQLException();
             }
             return all;
         } catch (SQLException e) {

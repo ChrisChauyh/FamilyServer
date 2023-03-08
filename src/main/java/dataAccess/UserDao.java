@@ -53,19 +53,21 @@ public class UserDao {
     /**
      *    use username to check if a user is in the system.
      * @param username
+     * @param password
      * @return false  if user is in the system already
      * @throws DataAccessException
      */
 
-    public boolean validate(String username)throws DataAccessException {
-        String sql = "SELECT * FROM User WHERE username = ?;";
+    public boolean validate(String username, String password)throws DataAccessException {
+        String sql = "SELECT * FROM User WHERE username = ? AND password = ?;";
         try(PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            if(username == null)
+            if(username == null|| password == null)
             {
                 throw new SQLException();
             }
             stmt.setString(1,username);
+            stmt.setString(2,password);
             if(stmt.executeQuery().next())
             {
                 return true;
@@ -105,16 +107,16 @@ public class UserDao {
 
     /**
      * grab the user info by the userID
-     * @param personID
+     * @param username
      * @return user object
      */
-    User find(String personID)throws DataAccessException {
+    public User find(String username)throws DataAccessException {
         User user;
         ResultSet rs;
-        String sql = "SELECT * FROM User WHERE personID = ?;\"";
+        String sql = "SELECT * FROM User WHERE username = ?;\"";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, personID);
+            stmt.setString(1, username);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(rs.getString("username"), rs.getString("password"),

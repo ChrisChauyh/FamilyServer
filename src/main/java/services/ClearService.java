@@ -11,6 +11,7 @@ public class ClearService {
     Database db = new Database();
 
     public ClearResult clear() throws DataAccessException, SQLException {
+
         try {
             System.out.println("Start clear handler");
 
@@ -28,6 +29,7 @@ public class ClearService {
 
             clearResult.setMessage("Clear succeeded.");
             clearResult.setSuccess(true);
+
 
             return clearResult;
         } catch (SQLException e) {

@@ -1,22 +1,22 @@
 package requestAndResult;
 
 public class LoginRequest {
-    private String message;
-    private boolean success;
+    private String username;
+    private String password;
 
-    public String getMessage() {
-        return message;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,13 +15,16 @@ class PersonDaoTest {
     private Database db;
     private Person bestPerson;
     private Person secondPerson;
+    private Person thirdPerson;
     private PersonDao pDao;
 
     @BeforeEach
     public void setUp() throws DataAccessException, SQLException {
         db = new Database();
         bestPerson = new Person("Ting1357", "Ting", "TingTing", "Liu", "f", "liu135", "liu246", "Chris135");
-        secondPerson = new Person("Chris1357", "Chris", "Yu Hin", "Chau", "m", "Chau134", "Wong246", "Ting246");
+        secondPerson = new Person("Chris1357", "Ting", "Yu Hin", "Chau", "m", "Chau134", "Wong246", "Ting246");
+        thirdPerson = new Person("ASddd", "Ting", "ergrg", "wef", "m", "Chau134", "Wong246", "Ting246");
+
         Connection conn = db.getConnection();
         pDao = new PersonDao(conn);
         pDao.clear();
@@ -72,7 +76,13 @@ class PersonDaoTest {
         assertEquals(bestPerson.getSpouseID(), compareTest.getSpouseID());
 
     }
-
+    @Test
+    void findPersons() throws DataAccessException{
+        pDao.createPerson(bestPerson);
+        pDao.createPerson(secondPerson);
+        pDao.createPerson(thirdPerson);
+        List<Person> test= pDao.findallPersons("Ting");
+        String testasd = "Hello";}
     @Test
     void findFail() throws DataAccessException {
         pDao.createPerson(bestPerson);

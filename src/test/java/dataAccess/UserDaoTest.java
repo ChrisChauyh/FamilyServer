@@ -41,7 +41,7 @@ class UserDaoTest {
     @Test
     public void registerPass() throws DataAccessException {
         uDao.createUser(bestUser);
-        User compareTest = uDao.find(bestUser.getPersonID());
+        User compareTest = uDao.find(bestUser.getUsername());
         assertNotNull(compareTest);
         assertEquals(bestUser.getPersonID(), compareTest.getPersonID());
         assertEquals(bestUser.getUsername(), compareTest.getUsername());
@@ -62,7 +62,7 @@ class UserDaoTest {
     public void findPass() throws DataAccessException {
         uDao.createUser(bestUser);
         uDao.createUser(secondUser);
-        User compareTest = uDao.find(bestUser.getPersonID());
+        User compareTest = uDao.find(bestUser.getUsername());
         assertEquals(bestUser.getPersonID(), compareTest.getPersonID());
         assertEquals(bestUser.getUsername(), compareTest.getUsername());
         assertEquals(bestUser.getPassword(), compareTest.getPassword());
@@ -101,6 +101,7 @@ class UserDaoTest {
         assertThrows(DataAccessException.class, () -> uDao.clearsingleuser(bestUser.getUsername()));
         assertThrows(DataAccessException.class, () -> uDao.clearsingleuser(null));
     }
+
     @Test
     public void validatePass() throws DataAccessException{
         // Arrange
@@ -109,22 +110,25 @@ class UserDaoTest {
         String nonExistingUsername = "testuser2";
         String emptyUsername = "";
         String nullUsername = null;
+        String rightpassword = "liu";
 
         // Act
-        boolean isExistingUser = uDao.validate(existingUsername);
-        boolean isNonExistingUser =  uDao.validate(nonExistingUsername);
-        boolean isEmptyUser =  uDao.validate(emptyUsername);
+        boolean isExistingUser = uDao.validate(existingUsername,rightpassword);
+        boolean isNonExistingUser =  uDao.validate(nonExistingUsername,rightpassword);
+        boolean isEmptyUser =  uDao.validate(emptyUsername,rightpassword);
+        boolean wrongPassword = uDao.validate(existingUsername,"asdiufb");
 
         // Assert
         assertTrue(isExistingUser);
         assertFalse(isNonExistingUser);
         assertFalse(isEmptyUser);
-        assertThrows(DataAccessException.class, () ->  uDao.validate(nullUsername));
+        assertFalse(wrongPassword);
+        assertThrows(DataAccessException.class, () ->  uDao.validate(nullUsername,nullUsername));
 
     }
     @Test
     public void validateFailed() throws DataAccessException{
-        assertThrows(DataAccessException.class, () -> uDao.validate(null));
+        assertThrows(DataAccessException.class, () -> uDao.validate(null,null));
     }
 
 }

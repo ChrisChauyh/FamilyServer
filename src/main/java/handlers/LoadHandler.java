@@ -30,10 +30,9 @@ public class LoadHandler implements HttpHandler {
                     // Read JSON string from the input stream
                     String reqData = stringHandler.readString(reqBody);
 
-
-                    LoadRequest request = (LoadRequest) gson.fromJson(reqData, LoadRequest.class);
+                    LoadRequest request = gson.fromJson(reqData, LoadRequest.class);
                     LoadService service = new LoadService();
-                    LoadResult result = service.load();
+                    LoadResult result = service.load(request);
 
                     if (result.getSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -59,3 +58,4 @@ public class LoadHandler implements HttpHandler {
 
     }
 }
+

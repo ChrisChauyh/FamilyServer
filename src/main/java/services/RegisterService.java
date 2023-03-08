@@ -26,7 +26,7 @@ public class RegisterService extends Database {
         UserDao userDao = new UserDao(conn);
         String curUsername = request.getUsername();
         String curAuthToken = authTokenDao.generateToken(curUsername);
-        if(userDao.validate(curUsername))
+        if(!userDao.validate(curUsername,"test"))
         {
 
         User user = new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getFirstName(), request.getLastName(), request.getGender(), curAuthToken);

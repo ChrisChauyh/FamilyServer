@@ -1,8 +1,21 @@
 package requestAndResult;
 
+import model.Person;
+
 public class PersonResult {
+    private Person[] data;
     private String message;
+
     private Boolean success;
+    public Person[] getData() {
+        return data;
+    }
+
+    public void setData(Person[] data) {
+        this.data = data;
+    }
+
+
 
     public String getMessage() {
         return message;
