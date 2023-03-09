@@ -76,13 +76,15 @@ class PersonDaoTest {
         assertEquals(bestPerson.getSpouseID(), compareTest.getSpouseID());
 
     }
+
     @Test
-    void findPersons() throws DataAccessException{
+    void findPersons() throws DataAccessException {
         pDao.createPerson(bestPerson);
         pDao.createPerson(secondPerson);
         pDao.createPerson(thirdPerson);
-        List<Person> test= pDao.findallPersons("Ting");
-        String testasd = "Hello";}
+        List<Person> test = pDao.findallPersons("Ting");
+    }
+
     @Test
     void findFail() throws DataAccessException {
         pDao.createPerson(bestPerson);
@@ -99,14 +101,15 @@ class PersonDaoTest {
     @Test
     void findallPersonsFail() throws DataAccessException {
 
-             }
+    }
+
     @Test
-    void clear() throws  DataAccessException{
+    void clear() throws DataAccessException {
         pDao.createPerson(bestPerson);
         pDao.createPerson(secondPerson);
         pDao.clear();
         assertThrows(DataAccessException.class, () -> pDao.find(bestPerson.getPersonID()));
-        assertThrows(DataAccessException.class, () ->  pDao.find(secondPerson.getPersonID()));
+        assertThrows(DataAccessException.class, () -> pDao.find(secondPerson.getPersonID()));
 
 
     }

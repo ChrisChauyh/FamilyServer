@@ -1,11 +1,12 @@
 package requestAndResult;
 
 public class LoginResult {
-    private String message;
-    private Boolean success;
     private String authtoken;
     private String username;
     private String personID;
+    private String message;
+    private Boolean success;
+
 
     public String getAuthtoken() {
         return authtoken;
