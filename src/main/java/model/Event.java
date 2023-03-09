@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Objects;
+import java.util.UUID;
+
 /**
  * an object representing an event
  */
@@ -53,6 +55,7 @@ public class Event {
         this.city = city;
         this.eventType = eventType;
         this.year = year;
+        this.setEventID(UUID.randomUUID().toString());
     }
 
     public String getEventID() {

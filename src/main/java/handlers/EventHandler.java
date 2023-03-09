@@ -34,10 +34,10 @@ public class EventHandler implements HttpHandler {
                         EventResult result = service.load(authToken);
                         if (result.getSuccess()) {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                            System.out.println("Done person handler");
+                            System.out.println("Done event handler");
                         } else {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
-                            System.out.println("Failed person handler");
+                            System.out.println("Failed event handler");
                         }
                         OutputStream resBody = exchange.getResponseBody();
                         String finalJson = gson.toJson(result);

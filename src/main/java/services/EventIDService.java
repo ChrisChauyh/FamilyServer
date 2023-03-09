@@ -15,7 +15,7 @@ public class EventIDService {
     public EventIDResult load(String authToken, String eventID) throws DataAccessException, SQLException {
         try {
             if (authToken != null || authToken != "") {
-                System.out.println("Start personID handler");
+                System.out.println("Start eventID handler");
                 Connection conn = db.getConnection();
                 AuthTokenDao authTokenDao = new AuthTokenDao(conn);
                 EventDao eventDao = new EventDao(conn);

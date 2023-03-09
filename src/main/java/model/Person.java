@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * a class representing a person
@@ -52,10 +53,9 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-        this.fatherID = fatherID;
-        this.motherID = motherID;
-        this.spouseID = spouseID;
+        this.personID = UUID.randomUUID().toString();
     }
+
 
     public String getPersonID() {
         return personID;

@@ -125,9 +125,9 @@ public class PersonDao {
                     stop = true;
                 }
             }
-            if (all.size() <1) {
-                throw new SQLException();
-            }
+//            if (all.size() <1) {
+//                throw new SQLException();
+//            }
             return all;
         } catch (SQLException e) {
             e.printStackTrace();
