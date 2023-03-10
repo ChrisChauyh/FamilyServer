@@ -44,10 +44,10 @@ public class LoginHandler implements HttpHandler {
 
                     if (result.getSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                        System.out.println("Done load handler");
+                        System.out.println("Done login handler");
                     } else {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
-                        System.out.println("Failed load handler");
+                        System.out.println("Failed login handler");
                     }
                     OutputStream resBody = exchange.getResponseBody();
                     String finalJson = gson.toJson(result);

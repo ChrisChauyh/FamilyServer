@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * a class representating user
@@ -47,7 +46,6 @@ public class User {
         this.lastName = lastName;
         this.gender = gender;
         this.personID = personID;
-        this.setPersonID(UUID.randomUUID().toString());
     }
 
     public String getUsername() {

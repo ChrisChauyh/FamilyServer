@@ -2,18 +2,20 @@ package requestAndResult;
 
 import model.Event;
 
+import java.util.ArrayList;
+
 public class EventResult {
-    private Event[] data;
+    private ArrayList<Event> data;
 
     private String message;
 
     private Boolean success;
 
-    public Event[] getData() {
+    public ArrayList<Event> getData() {
         return data;
     }
 
-    public void setData(Event[] data) {
+    public void setData(ArrayList<Event> data) {
         this.data = data;
     }
 

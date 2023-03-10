@@ -20,6 +20,7 @@ public class LoadService extends ClearService {
     public LoadResult load(LoadRequest request) throws DataAccessException, SQLException {
 
         try {
+            db.openConnection();
             System.out.println("Start load handler");
             clear();
             if (clearResult.getSuccess()) {
@@ -32,12 +33,10 @@ public class LoadService extends ClearService {
                         userDao.createUser(user);
                         countUsers++;
                     }
-
                     for (Person person : request.getPersons()) {
                         personDao.createPerson(person);
                         countPersons++;
                     }
-
                     for (Event event : request.getEvents()) {
                         eventDao.insert(event);
                         countEvents++;
@@ -47,15 +46,13 @@ public class LoadService extends ClearService {
 
             loadResult.setMessage("Successfully added "+ countUsers +" users, "+ countPersons +" persons, and "+ countEvents +" events to the database.");
             loadResult.setSuccess(true);
+            db.closeConnection(true);
             return loadResult;
-        } catch (SQLException e) {
+        } catch (SQLException | DataAccessException e) {
             loadResult.setMessage("Error:[" + e.getMessage() + "]");
             loadResult.setSuccess(false);
-        } catch (DataAccessException e) {
-            loadResult.setMessage("Error:[" + e.getMessage() + "]");
-            loadResult.setSuccess(false);
-        } finally {
             db.closeConnection(false);
+        } finally {
             return loadResult;
         }
     }

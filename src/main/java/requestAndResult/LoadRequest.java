@@ -4,33 +4,35 @@ import model.Event;
 import model.Person;
 import model.User;
 
+import java.util.ArrayList;
+
 public class LoadRequest {
     //objects created from json
-    private User[] users;
-    private Person[] persons;
-    private Event[] events;
+    private ArrayList<User> users;
+    private ArrayList<Person> persons;
+    private ArrayList<Event> events;
 
-    public User[] getUsers() {
+    public ArrayList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(User[] users) {
+    public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
 
-    public Person[] getPersons() {
+    public ArrayList<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons(Person[] persons) {
+    public void setPersons(ArrayList<Person> persons) {
         this.persons = persons;
     }
 
-    public Event[] getEvents() {
+    public ArrayList<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(Event[] events) {
+    public void setEvents(ArrayList<Event> events) {
         this.events = events;
     }
 }

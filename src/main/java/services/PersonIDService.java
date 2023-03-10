@@ -18,6 +18,7 @@ public class PersonIDService {
     public PersonIDResult load(String authToken, String personID) throws DataAccessException, SQLException {
         try {
             if (authToken != null || authToken != "") {
+                db.openConnection();
                 System.out.println("Start personID handler");
                 Connection conn = db.getConnection();
                 AuthTokenDao authTokenDao = new AuthTokenDao(conn);
@@ -48,21 +49,24 @@ public class PersonIDService {
                             personIDResult.setSpouseID(person.getSpouseID());
                         }
                         personIDResult.setSuccess(true);
+                        db.closeConnection(true);
                     }
                 }
             } else if (personID == "") {
                 personIDResult.setMessage("Error:[Invalid personID parameter]");
                 personIDResult.setSuccess(false);
+                db.closeConnection(false);
             } else {
                 personIDResult.setMessage("Error:[Invalid auth token]");
                 personIDResult.setSuccess(false);
+                db.closeConnection(false);
             }
 
         } catch (DataAccessException e) {
             personIDResult.setMessage("Error:[" + e + "]");
             personIDResult.setSuccess(false);
-        } finally {
             db.closeConnection(false);
+        } finally {
             return personIDResult;
         }
     }

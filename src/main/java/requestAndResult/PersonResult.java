@@ -2,20 +2,21 @@ package requestAndResult;
 
 import model.Person;
 
+import java.util.ArrayList;
+
 public class PersonResult {
-    private Person[] data;
+    private ArrayList<Person> data;
     private String message;
 
     private Boolean success;
-    public Person[] getData() {
+
+    public ArrayList<Person> getData() {
         return data;
     }
 
-    public void setData(Person[] data) {
+    public void setData(ArrayList<Person> data) {
         this.data = data;
     }
-
-
 
     public String getMessage() {
         return message;

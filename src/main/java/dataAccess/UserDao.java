@@ -53,12 +53,35 @@ public class UserDao {
     /**
      *    use username to check if a user is in the system.
      * @param username
-     * @param password
+
      * @return false  if user is in the system already
      * @throws DataAccessException
      */
 
-    public boolean validate(String username, String password)throws DataAccessException {
+    public boolean validateUsername(String username)throws DataAccessException {
+        String sql = "SELECT * FROM User WHERE username = ?;";
+        try(PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            if(username == null)
+            {
+                throw new SQLException();
+            }
+            stmt.setString(1,username);
+            if(stmt.executeQuery().next())
+            {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding an user in the database");
+        }
+
+    }
+    public boolean validatePassword(String username, String password)throws DataAccessException {
         String sql = "SELECT * FROM User WHERE username = ? AND password = ?;";
         try(PreparedStatement stmt = conn.prepareStatement(sql))
         {
@@ -82,28 +105,7 @@ public class UserDao {
         }
 
     }
-//    boolean validate(String username) throws DataAccessException {
-//        String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
-//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-//            stmt.setString(1, username);
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                return rs.getInt(1) > 0;
-//            }
-//            return false;
-//        } catch (SQLException e) {
-//            throw new DataAccessException("Error encountered while finding a user in the database", e);
-//        }
-//    }
-    /*
-    主要的變更是：
 
-改用 COUNT(*) 取代 SELECT *，因為只需要知道是否有符合的資料，不需要取出所有資料欄位。
-將 ResultSet 的檢查移至 if 敘述式中，讓程式碼更容易閱讀，也可以少使用一個變數。
-透過 rs.getInt(1) 取得回傳的整數，並判斷是否大於零，以判定查詢是否成功。
-重新拋出 DataAccessException，並將原始的 SQLException 附加上去，以協助日誌紀錄與錯誤排除。
-這些變更可以讓程式碼更簡潔、可讀性更高、效能更佳。另外，使用 try-with-resources 可以在程式碼中自動關閉資源，減少記憶體外洩的風險。
-     */
 
     /**
      * grab the user info by the userID
@@ -113,7 +115,7 @@ public class UserDao {
     public User find(String username)throws DataAccessException {
         User user;
         ResultSet rs;
-        String sql = "SELECT * FROM User WHERE username = ?;\"";
+        String sql = "SELECT * FROM User WHERE username = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);

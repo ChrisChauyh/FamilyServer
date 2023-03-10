@@ -1,12 +1,15 @@
 package services;
 
-import dataAccess.*;
+import dataAccess.AuthTokenDao;
+import dataAccess.DataAccessException;
+import dataAccess.Database;
+import dataAccess.PersonDao;
 import model.Person;
 import requestAndResult.PersonResult;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
 public class PersonService {
     PersonResult personResult = new PersonResult();
@@ -16,6 +19,7 @@ public class PersonService {
             if(authToken != null || authToken !="")
             {
                 System.out.println("Start person handler");
+                db.openConnection();
                 Connection conn = db.getConnection();
                 AuthTokenDao authTokenDao = new AuthTokenDao(conn);
                 PersonDao personDao = new PersonDao(conn);
@@ -24,19 +28,20 @@ public class PersonService {
                 String username = authTokenDao.getUserbyTokens(authToken);
 
                 //print out all associated usernames
-                List<Person> personList = personDao.findallPersons(username);
-                Person[] tmpPerson = personList.toArray(new Person[personList.size()]);
-                personResult.setData(tmpPerson);
+                ArrayList<Person> personList = personDao.findallPersons(username);
+                personResult.setData(personList);
                 personResult.setSuccess(true);
+                db.closeConnection(true);
             }else{
                 personResult.setMessage("Error:[Invalid auth token]");
                 personResult.setSuccess(false);
+                db.closeConnection(false);
             }
         } catch (DataAccessException e) {
-            personResult.setMessage("Error:[" + e +"]");
+            personResult.setMessage("Error:[" + e.getMessage() +"]");
             personResult.setSuccess(false);
-        } finally {
             db.closeConnection(false);
+        } finally {
             return personResult;
         }
     }

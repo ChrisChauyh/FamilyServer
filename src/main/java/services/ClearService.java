@@ -24,8 +24,6 @@ public class ClearService {
             db.closeConnection(true);
             clearResult.setMessage("Clear succeeded.");
             clearResult.setSuccess(true);
-
-            return clearResult;
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
             clearResult.setMessage("Error:[" + e.getMessage() + "]");

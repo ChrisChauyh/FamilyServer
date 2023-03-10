@@ -17,32 +17,36 @@ public class LoginService {
 
     public LoginResult login(LoginRequest request) throws DataAccessException, SQLException {
         try{
+            db.openConnection();
             System.out.println("Start login handler");
             Connection conn = db.getConnection();
             UserDao userDao = new UserDao(conn);
             AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            User curUser = userDao.find(request.getUsername());
 
-            if(userDao.validate(request.getUsername(), request.getPassword())){
+            if(userDao.validateUsername(curUser.getUsername())){
                 String tempToken = authTokenDao.generateToken(request.getUsername());
                 String tempUsername = authTokenDao.getUserbyTokens(tempToken);
                 User tempuser = userDao.find(request.getUsername());
-                if(tempUsername == request.getUsername())
+                if(tempUsername.equals(request.getUsername().toString()))
                 {
                     loginResult.setAuthtoken(tempToken);
                     loginResult.setUsername(tempuser.getUsername());
                     loginResult.setPersonID(tempuser.getPersonID());
                     loginResult.setSuccess(true);
+                    db.closeConnection(true);
                 }
             }else{
                 loginResult.setMessage("Error:[Wrong Username or password]");
                 loginResult.setSuccess(false);
+                db.closeConnection(false);
             }
 
         } catch (DataAccessException | SQLException e) {
             loginResult.setMessage("Error:[Request property missing or has invalid value.]");
             loginResult.setSuccess(false);
-        } finally {
             db.closeConnection(false);
+        } finally {
             return loginResult;
         }
     }

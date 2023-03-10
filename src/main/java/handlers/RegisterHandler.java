@@ -38,10 +38,10 @@ public class RegisterHandler implements HttpHandler {
 
                     if (registerResult.getSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                        System.out.println("Done personID handler");
+                        System.out.println("Done register handler");
                     } else {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
-                        System.out.println("Failed personID handler");
+                        System.out.println("Failed register handler");
                     }
                     OutputStream resBody = exchange.getResponseBody();
                     String finalJson = gson.toJson(registerResult);

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * a class representing a person
@@ -44,17 +43,26 @@ public class Person {
      *this person's spouse ID
      */
     private String spouseID;
-    /**
-     * Create constructor for the whole person object
-     */
+
     public Person(String personID, String associatedUsername, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;
         this.associatedUsername = associatedUsername;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
-        this.personID = UUID.randomUUID().toString();
+        this.fatherID = fatherID;
+        this.motherID = motherID;
+        this.spouseID = spouseID;
     }
+
+    public Person() {
+    }
+
+    /**
+     * Create constructor for the whole person object
+     */
+
+
 
 
     public String getPersonID() {

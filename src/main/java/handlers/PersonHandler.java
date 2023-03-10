@@ -60,10 +60,10 @@ public class PersonHandler implements HttpHandler {
 
                         if (result.isSuccess()) {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                            System.out.println("Done personID handler");
+                            System.out.println("Done person handler");
                         } else {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
-                            System.out.println("Failed personID handler");
+                            System.out.println("Failed person handler");
                         }
                         OutputStream resBody = exchange.getResponseBody();
                         String finalJson = gson.toJson(result);

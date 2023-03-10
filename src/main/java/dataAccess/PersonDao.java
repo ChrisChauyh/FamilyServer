@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PersonDao {
     private final Connection conn;
@@ -104,34 +103,31 @@ public class PersonDao {
         }
     }
 
-    public List<Person> findallPersons(String associatedUsername) throws DataAccessException{
+    public ArrayList<Person> findallPersons(String associatedUsername) throws DataAccessException{
         //find all person that a user has
         Person person;
         ResultSet rs;
-        List<Person> all = new ArrayList<>();
+        ArrayList<Person> all = new ArrayList<>();
         String sql = "SELECT * FROM Person WHERE associatedUsername = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
             rs = stmt.executeQuery();
             boolean stop = false;
             while(stop == false) {
-                if(rs.next()){
+
                     person = new Person(rs.getString("personID"),
                             rs.getString("associatedUsername"),rs.getString("firstName"),
                             rs.getString("lastName"),rs.getString("gender"),
                             rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
                     all.add(person);
-                }else{
+                if(!rs.next()){
                     stop = true;
                 }
             }
-//            if (all.size() <1) {
-//                throw new SQLException();
-//            }
             return all;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding all events in the database");
+            throw new DataAccessException("Error encountered while finding all persons in the database");
         }
     }
 

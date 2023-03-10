@@ -113,22 +113,20 @@ class UserDaoTest {
         String rightpassword = "liu";
 
         // Act
-        boolean isExistingUser = uDao.validate(existingUsername,rightpassword);
-        boolean isNonExistingUser =  uDao.validate(nonExistingUsername,rightpassword);
-        boolean isEmptyUser =  uDao.validate(emptyUsername,rightpassword);
-        boolean wrongPassword = uDao.validate(existingUsername,"asdiufb");
+        boolean isExistingUser = uDao.validateUsername(existingUsername);
+        boolean isNonExistingUser =  uDao.validateUsername(nonExistingUsername);
+        boolean isEmptyUser =  uDao.validateUsername(emptyUsername);
 
         // Assert
         assertTrue(isExistingUser);
         assertFalse(isNonExistingUser);
         assertFalse(isEmptyUser);
-        assertFalse(wrongPassword);
-        assertThrows(DataAccessException.class, () ->  uDao.validate(nullUsername,nullUsername));
+        assertThrows(DataAccessException.class, () ->  uDao.validateUsername(nullUsername));
 
     }
     @Test
     public void validateFailed() throws DataAccessException{
-        assertThrows(DataAccessException.class, () -> uDao.validate(null,null));
+        assertThrows(DataAccessException.class, () -> uDao.validateUsername(null));
     }
 
 }
