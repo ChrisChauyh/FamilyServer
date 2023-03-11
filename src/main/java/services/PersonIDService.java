@@ -30,40 +30,45 @@ public class PersonIDService {
                 List<Person> personList = personDao.findallPersons(username);
                 Person[] tmpPersons = personList.toArray(new Person[personList.size()]);
                 for (Person person : tmpPersons) {
-                    if (personID == person.getPersonID()) {
+                    if (person.getPersonID().equals(personID.toString())) {
                         personIDResult.setAssociatedUsername(person.getAssociatedUsername());
                         personIDResult.setPersonID(person.getPersonID());
                         personIDResult.setFirstName(person.getFirstName());
                         personIDResult.setLastName(person.getLastName());
                         personIDResult.setGender(person.getGender());
-                        if(person.getFatherID() != "")
+                        if(person.getFatherID() != null)
                         {
                             personIDResult.setFatherID(person.getFatherID());
                         }
-                        if(person.getMotherID() != "")
+                        if(person.getMotherID() != null)
                         {
                             personIDResult.setMotherID(person.getMotherID());
                         }
-                        if(person.getSpouseID() != "")
+                        if(person.getSpouseID() != null)
                         {
                             personIDResult.setSpouseID(person.getSpouseID());
                         }
                         personIDResult.setSuccess(true);
+                        personIDResult.setMessage(null);
                         db.closeConnection(true);
+                        break;
+                    }else{
+                        personIDResult.setMessage("Error:[Requested person does not belong to this user]");
+                        personIDResult.setSuccess(false);
                     }
                 }
-            } else if (personID == "") {
+            } else if (personID.equals("")|| personID == null) {
                 personIDResult.setMessage("Error:[Invalid personID parameter]");
                 personIDResult.setSuccess(false);
                 db.closeConnection(false);
-            } else {
+            } else if(authToken.equals("")|| authToken == null) {
                 personIDResult.setMessage("Error:[Invalid auth token]");
                 personIDResult.setSuccess(false);
                 db.closeConnection(false);
             }
 
         } catch (DataAccessException e) {
-            personIDResult.setMessage("Error:[" + e + "]");
+            personIDResult.setMessage("Error:[Invalid auth token]");
             personIDResult.setSuccess(false);
             db.closeConnection(false);
         } finally {

@@ -41,6 +41,8 @@ public class LoadService extends ClearService {
                         eventDao.insert(event);
                         countEvents++;
                     }
+                }else{
+                    throw new DataAccessException("Invalid request data (missing values, invalid values, etc.)");
                 }
             }
 
@@ -48,8 +50,13 @@ public class LoadService extends ClearService {
             loadResult.setSuccess(true);
             db.closeConnection(true);
             return loadResult;
-        } catch (SQLException | DataAccessException e) {
-            loadResult.setMessage("Error:[" + e.getMessage() + "]");
+        } catch (SQLException e) {
+            loadResult.setMessage("Error:Internal server error]");
+            loadResult.setSuccess(false);
+            db.closeConnection(false);
+
+        }catch (DataAccessException e){
+            loadResult.setMessage("Error:["+ e.getMessage()+ "]");
             loadResult.setSuccess(false);
             db.closeConnection(false);
         } finally {

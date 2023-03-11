@@ -35,7 +35,6 @@ public class RegisterHandler implements HttpHandler {
                     RegisterService service = new RegisterService();
                     RegisterResult registerResult = service.register(request);
 
-
                     if (registerResult.getSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                         System.out.println("Done register handler");

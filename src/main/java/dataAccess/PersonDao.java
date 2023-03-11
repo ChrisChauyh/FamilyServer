@@ -80,49 +80,21 @@ public class PersonDao {
     }
 
 
-    public Person findpersonID(String personID) throws DataAccessException
-    {
-        Person person;
-        ResultSet rs;
-        String sql = "SELECT * FROM Person WHERE personID = ?;";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, personID);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                person = new Person(rs.getString("personID"),
-                        rs.getString("associatedUsername"),rs.getString("firstName"),
-                        rs.getString("lastName"),rs.getString("gender"),
-                        rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
-                return person;
-            } else {
-                throw new SQLException();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding a person in the database");
-        }
-    }
-
     public ArrayList<Person> findallPersons(String associatedUsername) throws DataAccessException{
         //find all person that a user has
         Person person;
         ResultSet rs;
-        ArrayList<Person> all = new ArrayList<>();
-        String sql = "SELECT * FROM Person WHERE associatedUsername = ?;";
+        ArrayList<Person> all = new ArrayList<Person>();
+        String sql = "SELECT * FROM Person WHERE associatedUsername = ? ;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
             rs = stmt.executeQuery();
-            boolean stop = false;
-            while(stop == false) {
-
+            while(rs.next()) {
                     person = new Person(rs.getString("personID"),
                             rs.getString("associatedUsername"),rs.getString("firstName"),
                             rs.getString("lastName"),rs.getString("gender"),
                             rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
                     all.add(person);
-                if(!rs.next()){
-                    stop = true;
-                }
             }
             return all;
         } catch (SQLException e) {

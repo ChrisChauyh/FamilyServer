@@ -34,7 +34,7 @@ public class ClearHandler implements HttpHandler {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                         System.out.println("Done clear handler");
                     }else{
-                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
+                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                         System.out.println("Failed clear handler");
                     }
                     OutputStream resBody = exchange.getResponseBody();
@@ -44,7 +44,7 @@ public class ClearHandler implements HttpHandler {
                 }
             }
         } catch (IOException | DataAccessException e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             exchange.getResponseBody().close();
             e.printStackTrace();
 

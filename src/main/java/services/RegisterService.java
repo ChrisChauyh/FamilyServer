@@ -1,9 +1,6 @@
 package services;
 
-import dataAccess.AuthTokenDao;
-import dataAccess.DataAccessException;
-import dataAccess.Database;
-import dataAccess.UserDao;
+import dataAccess.*;
 import model.User;
 import requestAndResult.RegisterRequest;
 import requestAndResult.RegisterResult;
@@ -39,41 +36,35 @@ public class RegisterService {
             Connection conn = db.getConnection();
             AuthTokenDao authTokenDao = new AuthTokenDao(conn);
             UserDao userDao = new UserDao(conn);
-
             //create authtoken and a new user
             if (!userDao.validateUsername(request.getUsername())) {
                 User user = new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getFirstName(), request.getLastName(), request.getGender(), UUID.randomUUID().toString());
                 userDao.createUser(user);
                 String curAuthToken = authTokenDao.generateToken(user.getUsername());
-
-                //auto fill 4 generations
-//                FillService fillService = new FillService();
-//                fillService.fill(request.getUsername(), 4);
-                db.closeConnection(true);
                 registerResult.setAuthtoken(curAuthToken);
                 registerResult.setUsername(user.getUsername());
                 registerResult.setPersonID(user.getPersonID());
                 registerResult.setSuccess(true);
+                db.closeConnection(true);
+                FillService fillService = new FillService();
+                fillService.fill(registerResult.getUsername(),5);
 
             } else {
                 registerResult.setMessage("Username already taken by another user");
                 registerResult.setSuccess(false);
                 db.closeConnection(false);
             }
+
+
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
             registerResult.setMessage("Error:[Internal server error]");
             registerResult.setSuccess(false);
-            db.closeConnection(false);}
-//        }catch (FileNotFoundException e)
-//        {
-//            registerResult.setMessage("Error:[Request property missing or has invalid value]");
-//            registerResult.setSuccess(false);
-//            db.closeConnection(false);
-//        } finally {
+            db.closeConnection(false);
+        } finally {
             return registerResult;
         }
 
-   // }
+    }
 
 }

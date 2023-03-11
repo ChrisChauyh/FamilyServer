@@ -26,7 +26,7 @@ public class ClearService {
             clearResult.setSuccess(true);
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();
-            clearResult.setMessage("Error:[" + e.getMessage() + "]");
+            clearResult.setMessage("Error:[Internal server error]");
             clearResult.setSuccess(false);
             db.closeConnection(false);
         } finally {

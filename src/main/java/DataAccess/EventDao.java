@@ -6,8 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 
 public class EventDao {
     private final Connection conn;
@@ -76,29 +75,19 @@ public class EventDao {
         }
     }
 
-    public List<Event> findallEvents(String associatedUsername) throws DataAccessException {
-        Event event;
-        ResultSet rs;
-        List<Event> all = new LinkedList<Event>();
+    public ArrayList<Event> findallEvents(String associatedUsername) throws DataAccessException {
+        ArrayList<Event> all = new ArrayList<Event>();
         String sql = "SELECT * FROM Event WHERE associatedUsername = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
-            rs = stmt.executeQuery();
-            boolean stop = false;
-            while (stop == false) {
-                if (rs.next()) {
-                    event = new Event(rs.getString("EventID"), rs.getString("AssociatedUsername"),
-                            rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
-                            rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
-                            rs.getInt("Year"));
-                    all.add(event);
-                } else {
-                    stop = true;
-                }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Event event = new Event(rs.getString("EventID"), rs.getString("AssociatedUsername"),
+                        rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
+                        rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
+                        rs.getInt("Year"));
+                all.add(event);
             }
-//            if (all.size() <1) {
-//                throw new SQLException();
-//            }
             return all;
         } catch (SQLException e) {
             e.printStackTrace();

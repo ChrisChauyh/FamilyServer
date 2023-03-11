@@ -36,7 +36,7 @@ public class EventHandler implements HttpHandler {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                             System.out.println("Done event handler");
                         } else {
-                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                             System.out.println("Failed event handler");
                         }
                         OutputStream resBody = exchange.getResponseBody();
@@ -60,7 +60,7 @@ public class EventHandler implements HttpHandler {
                             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                             System.out.println("Done eventID handler");
                         } else {
-                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                             System.out.println("Failed eventID handler");
                         }
                         OutputStream resBody = exchange.getResponseBody();

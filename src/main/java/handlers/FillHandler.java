@@ -43,10 +43,10 @@ public class FillHandler implements HttpHandler {
 
                 if (result.getSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                    System.out.println("Done personID handler");
+                    System.out.println("Done fill handler");
                 } else {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
-                    System.out.println("Failed personID handler");
+                    System.out.println("Failed fill handler");
                 }
                 OutputStream resBody = exchange.getResponseBody();
                 String finalJson = gson.toJson(result);

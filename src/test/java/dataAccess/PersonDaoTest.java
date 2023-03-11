@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,15 @@ class PersonDaoTest {
         db.closeConnection(false);
     }
 
-
+    @Test
+    void findAll() throws DataAccessException
+    {
+        pDao.createPerson(bestPerson);
+        pDao.createPerson(secondPerson);
+        pDao.createPerson(thirdPerson);
+        ArrayList<Person> test = pDao.findallPersons("Ting");
+        int test2 = test.size();
+    }
     @Test
     void createPersonPass() throws DataAccessException {
         pDao.createPerson(bestPerson);

@@ -16,11 +16,11 @@ public class PersonService {
     Database db = new Database();
     public PersonResult load(String authToken) throws DataAccessException, SQLException{
         try{
-            if(authToken != null || authToken !="")
-            {
+            db.openConnection();
+            Connection conn = db.getConnection();
+
                 System.out.println("Start person handler");
-                db.openConnection();
-                Connection conn = db.getConnection();
+
                 AuthTokenDao authTokenDao = new AuthTokenDao(conn);
                 PersonDao personDao = new PersonDao(conn);
 
@@ -29,16 +29,17 @@ public class PersonService {
 
                 //print out all associated usernames
                 ArrayList<Person> personList = personDao.findallPersons(username);
+            if(authToken == null || authToken ==""|| username == null || username =="")
+            {
+               throw new DataAccessException("Invalid auth token");
+            }else{
                 personResult.setData(personList);
                 personResult.setSuccess(true);
                 db.closeConnection(true);
-            }else{
-                personResult.setMessage("Error:[Invalid auth token]");
-                personResult.setSuccess(false);
-                db.closeConnection(false);
             }
+
         } catch (DataAccessException e) {
-            personResult.setMessage("Error:[" + e.getMessage() +"]");
+            personResult.setMessage("Error:[Invalid auth token]");
             personResult.setSuccess(false);
             db.closeConnection(false);
         } finally {

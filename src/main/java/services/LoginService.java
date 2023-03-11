@@ -28,14 +28,19 @@ public class LoginService {
                 String tempToken = authTokenDao.generateToken(request.getUsername());
                 String tempUsername = authTokenDao.getUserbyTokens(tempToken);
                 User tempuser = userDao.find(request.getUsername());
-                if(tempUsername.equals(request.getUsername().toString()))
+                if(tempUsername.equals(request.getUsername().toString()) && tempuser.getPassword().equals(request.getPassword().toString()))
                 {
                     loginResult.setAuthtoken(tempToken);
                     loginResult.setUsername(tempuser.getUsername());
                     loginResult.setPersonID(tempuser.getPersonID());
                     loginResult.setSuccess(true);
                     db.closeConnection(true);
+                }else {
+                    loginResult.setMessage("Error:[Wrong Username or password]");
+                    loginResult.setSuccess(false);
+                    db.closeConnection(false);
                 }
+
             }else{
                 loginResult.setMessage("Error:[Wrong Username or password]");
                 loginResult.setSuccess(false);
