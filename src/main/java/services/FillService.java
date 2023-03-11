@@ -3,7 +3,6 @@ package services;
 import com.google.gson.Gson;
 import dataAccess.*;
 import json.*;
-import json.LocationData;
 import model.Event;
 import model.Person;
 import model.User;
@@ -14,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -32,6 +30,8 @@ public class FillService {
     LocationData locationData = (LocationData) readJson("src/main/java/json/locations.json", LocationData.class);
     int personsAdded = 0;
     int eventsAdded = 0;
+
+    int maxbirthDate = 13;
 
     public FillService() throws DataAccessException, SQLException, FileNotFoundException {
 
@@ -66,56 +66,62 @@ public class FillService {
             }
 
             User curUser = userDao.find(username);
-            Person userPerson = new Person(curUser.getPersonID(), curUser.getUsername(), curUser.getFirstName(), curUser.getLastName(), curUser.getGender(),null,null,null);
-            personDao.createPerson(userPerson);
             int birthdate = 1998;
-            generateBDEvents(userPerson,birthdate);
 
-            generatePerson(curUser.getGender().toString(), gens+1, userPerson, birthdate-13- random.nextInt(50));
+            Person myself =  generatePerson(curUser.getGender().toString(), gens + 1, curUser, birthdate - 13 - random.nextInt(50));
+            personDao.changerootPerson(curUser.getPersonID(), curUser.getFirstName(), curUser.getLastName(), myself.getPersonID());
+            eventDao.clearuserdeath(myself.getPersonID(), "death");
+            eventDao.changerootevent(curUser.getPersonID(),myself.getPersonID());
+            eventsAdded--;
 
-            fillResult.setMessage("Successfully added " + personsAdded + " persons, " + eventsAdded + " events to the database.");
+
+            fillResult.setMessage("Successfully added " + personsAdded + " persons and " + eventsAdded + " events to the database.");
             fillResult.setSuccess(true);
-            ArrayList<Person> personList = personDao.findallPersons(username);
-            ArrayList<Event> eventList = eventDao.findallEvents(username);
-            db.closeConnection(true);
-
         } catch (DataAccessException | SQLException e) {
             fillResult.setMessage("Error:[" + e + "]");
             fillResult.setSuccess(false);
             db.closeConnection(false);
         } finally {
+            db.closeConnection(true);
             return fillResult;
         }
 
 
-
     }
 
-    private Person generatePerson(String gender, int generations, Person userPerson, int birthdate) throws SQLException, DataAccessException {
+    private Person generatePerson(String gender, int generations, User userPerson, int birthdate) throws SQLException, DataAccessException {
         //Parents
         Person father = null;
         Person mother = null;
         PersonDao personDao = new PersonDao(db.getConnection());
 
         if (generations > 1) {
-            mother = generatePerson("f", generations - 1, userPerson, birthdate - random.nextInt(birthdate - (birthdate - 30)));
-            father = generatePerson("m", generations - 1, userPerson, birthdate - random.nextInt(birthdate - (birthdate - 30)));
+
+            mother = generatePerson("f", generations - 1, userPerson, birthdate - random.nextInt(38) - 13);
+            father = generatePerson("m", generations - 1, userPerson, birthdate- random.nextInt(38) - 13);
             //set them to spouse ID
             father.setSpouseID(mother.getPersonID());
             mother.setSpouseID(father.getPersonID());
             //add marriage events
-            generateMarriage(father, mother);
+            int marriageYear = birthdate + new Random().nextInt(20);
+            generateMarriage(father, mother, marriageYear);
         }
         Person person = new Person();
         person.setPersonID(UUID.randomUUID().toString());
         person.setGender(gender);
-        person.setAssociatedUsername(userPerson.getAssociatedUsername());
+        person.setAssociatedUsername(userPerson.getUsername());
         if (father != null) {
             person.setFatherID(father.getPersonID());
         }
         if (mother != null) {
             person.setMotherID(mother.getPersonID());
         }
+        if(father != null && mother != null)
+        {
+            personDao.setspouseID(father.getPersonID(), mother.getPersonID());
+            personDao.setspouseID(mother.getPersonID(), father.getPersonID());
+        }
+
         if (gender.equals("f")) {
             person.setFirstName(fname.getData()[random.nextInt(fname.getData().length - 1)]);
         } else {
@@ -128,6 +134,7 @@ public class FillService {
         //sql create person
         personDao.createPerson(person);
         personsAdded++;
+
         return person;
     }
 
@@ -142,21 +149,21 @@ public class FillService {
             deathLocation = locationData.getData()[deathIndex];
         }
         Event birth = new Event(UUID.randomUUID().toString(), person.getAssociatedUsername(), person.getPersonID(), birthLocation.getLatitude(), birthLocation.getLongitude(), birthLocation.getCountry(), birthLocation.getCity(), "birth", birthdate);
-        Event death = new Event(UUID.randomUUID().toString(), person.getAssociatedUsername(), person.getPersonID(), deathLocation.getLatitude(), deathLocation.getLongitude(), deathLocation.getCountry(), deathLocation.getCity(), "death", birthdate + 30);
+        Event death = new Event(UUID.randomUUID().toString(), person.getAssociatedUsername(), person.getPersonID(), deathLocation.getLatitude(), deathLocation.getLongitude(), deathLocation.getCountry(), deathLocation.getCity(), "death", birthdate + random.nextInt(birthdate - (birthdate - 30)));
         eventDao.insert(birth);
         eventDao.insert(death);
         eventsAdded += 2;
     }
 
-    private void generateMarriage(Person father, Person mother) throws DataAccessException {
+    private void generateMarriage(Person father, Person mother, int birthYear) throws DataAccessException {
         Location location = null;
         EventDao eventDao = new EventDao(db.getConnection());
         if (locationData.getData().length > 0) {
             int locationIndex = random.nextInt(locationData.getData().length);
             location = locationData.getData()[locationIndex];
         }
-        Event marriagefather = new Event(UUID.randomUUID().toString(), father.getAssociatedUsername(), father.getPersonID(), location.getLatitude(), location.getLongitude(), location.getCountry(), location.getCity(), "marriage", 2000);
-        Event marriagemother = new Event(UUID.randomUUID().toString(), mother.getAssociatedUsername(), mother.getPersonID(), location.getLatitude(), location.getLongitude(), location.getCountry(), location.getCity(), "marriage", 2000);
+        Event marriagefather = new Event(UUID.randomUUID().toString(), father.getAssociatedUsername(), father.getPersonID(), location.getLatitude(), location.getLongitude(), location.getCountry(), location.getCity(), "marriage", birthYear);
+        Event marriagemother = new Event(UUID.randomUUID().toString(), mother.getAssociatedUsername(), mother.getPersonID(), location.getLatitude(), location.getLongitude(), location.getCountry(), location.getCity(), "marriage", birthYear);
         eventDao.insert(marriagemother);
         eventDao.insert(marriagefather);
         eventsAdded += 2;

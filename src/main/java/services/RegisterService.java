@@ -47,14 +47,13 @@ public class RegisterService {
                 registerResult.setSuccess(true);
                 db.closeConnection(true);
                 FillService fillService = new FillService();
-                fillService.fill(registerResult.getUsername(),5);
+                fillService.fill(registerResult.getUsername(),4);
 
             } else {
-                registerResult.setMessage("Username already taken by another user");
+                registerResult.setMessage("Error:[Username already taken by another user]");
                 registerResult.setSuccess(false);
                 db.closeConnection(false);
             }
-
 
         } catch (SQLException | DataAccessException e) {
             e.printStackTrace();

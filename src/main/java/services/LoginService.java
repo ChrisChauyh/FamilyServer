@@ -26,7 +26,7 @@ public class LoginService {
 
             if(userDao.validateUsername(curUser.getUsername())){
                 String tempToken = authTokenDao.generateToken(request.getUsername());
-                String tempUsername = authTokenDao.getUserbyTokens(tempToken);
+                String tempUsername = authTokenDao.getUserbyTokens(tempToken).toLowerCase();
                 User tempuser = userDao.find(request.getUsername());
                 if(tempUsername.equals(request.getUsername().toString()) && tempuser.getPassword().equals(request.getPassword().toString()))
                 {
@@ -39,6 +39,7 @@ public class LoginService {
                     loginResult.setMessage("Error:[Wrong Username or password]");
                     loginResult.setSuccess(false);
                     db.closeConnection(false);
+
                 }
 
             }else{

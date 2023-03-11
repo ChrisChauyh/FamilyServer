@@ -20,10 +20,11 @@ public class LoadService extends ClearService {
     public LoadResult load(LoadRequest request) throws DataAccessException, SQLException {
 
         try {
-            db.openConnection();
+
             System.out.println("Start load handler");
             clear();
             if (clearResult.getSuccess()) {
+                db.openConnection();
                 Connection conn = db.getConnection();
                 PersonDao personDao = new PersonDao(conn);
                 EventDao eventDao = new EventDao(conn);
@@ -48,8 +49,6 @@ public class LoadService extends ClearService {
 
             loadResult.setMessage("Successfully added "+ countUsers +" users, "+ countPersons +" persons, and "+ countEvents +" events to the database.");
             loadResult.setSuccess(true);
-            db.closeConnection(true);
-            return loadResult;
         } catch (SQLException e) {
             loadResult.setMessage("Error:Internal server error]");
             loadResult.setSuccess(false);
@@ -60,6 +59,7 @@ public class LoadService extends ClearService {
             loadResult.setSuccess(false);
             db.closeConnection(false);
         } finally {
+            db.closeConnection(true);
             return loadResult;
         }
     }

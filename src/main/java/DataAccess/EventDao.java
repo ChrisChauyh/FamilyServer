@@ -41,7 +41,17 @@ public class EventDao {
             throw new DataAccessException("Error encountered while inserting an event into the database");
         }
     }
-
+    public void changerootevent(String newID, String oldID) throws DataAccessException {
+        String sql = "UPDATE Event SET personID = ? WHERE personID = ? ;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newID);
+            stmt.setString(2, oldID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearing the person table");
+        }
+    }
     public Event find(String eventID) throws DataAccessException {
         Event event;
         ResultSet rs;
@@ -77,12 +87,14 @@ public class EventDao {
 
     public ArrayList<Event> findallEvents(String associatedUsername) throws DataAccessException {
         ArrayList<Event> all = new ArrayList<Event>();
-        String sql = "SELECT * FROM Event WHERE associatedUsername = ?;";
+        Event event;
+        ResultSet rs;
+        String sql = "SELECT * FROM Event WHERE associatedUsername = ? ;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
             while (rs.next()) {
-                Event event = new Event(rs.getString("EventID"), rs.getString("AssociatedUsername"),
+                event = new Event(rs.getString("EventID"), rs.getString("associatedUsername"),
                         rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
                         rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
                         rs.getInt("Year"));
@@ -99,6 +111,20 @@ public class EventDao {
         String sql = "DELETE FROM Event WHERE eventID = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, eventID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearning an event in the database");
+        }
+    }
+
+
+
+    public void clearuserdeath(String personID, String eventType) throws DataAccessException {
+        String sql = "DELETE FROM Event WHERE (personID = ? AND eventType = ?);";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            stmt.setString(2, eventType);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

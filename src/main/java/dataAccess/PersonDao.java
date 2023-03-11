@@ -56,6 +56,33 @@ public class PersonDao {
 //            throw new DataAccessException("Error encountered while finding the username in the database");
 //        }
 //    }
+
+
+
+    public void changerootPerson(String newID, String firstname, String lastname, String oldID) throws DataAccessException {
+        String sql = "UPDATE Person SET personID = ?, firstName = ? , lastName = ? WHERE personID = ? ;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newID);
+            stmt.setString(2, firstname);
+            stmt.setString(3, lastname);
+            stmt.setString(4, oldID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearing the person table");
+        }
+    }
+    public void setspouseID(String spouseID, String personID) throws DataAccessException {
+        String sql = "UPDATE Person SET spouseID = ? WHERE personID = ? ;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, spouseID);
+            stmt.setString(2, personID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearing the person table");
+        }
+    }
     public Person find(String personID) throws DataAccessException
     {
         Person person;

@@ -8,16 +8,13 @@ import model.Event;
 import requestAndResult.EventResult;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EventService {
     EventResult eventResult = new EventResult();
     Database db = new Database();
-    public EventResult load(String authToken) throws DataAccessException, SQLException {
+    public EventResult load(String authToken) throws DataAccessException {
         try{
-            if(authToken != null || authToken !="")
-            {
                 db.openConnection();
                 System.out.println("Start event handler");
                 Connection conn = db.getConnection();
@@ -29,17 +26,13 @@ public class EventService {
 
                 //print out all associated usernames
                 ArrayList<Event> eventList = eventDao.findallEvents(username);
+            if(authToken == null || authToken ==""|| username == null || username =="")
+            {
+                throw new DataAccessException("Invalid auth token");
+            }else{
                 eventResult.setData(eventList);
                 eventResult.setSuccess(true);
                 db.closeConnection(true);
-                /**
-                 * Returns ALL events for ALL family members of the current user. The current user is determined from the provided auth token.
-                 */
-
-            }else{
-                eventResult.setMessage("Error:[Invalid auth token]");
-                eventResult.setSuccess(false);
-                db.closeConnection(false);
             }
         } catch (DataAccessException e) {
             e.printStackTrace();

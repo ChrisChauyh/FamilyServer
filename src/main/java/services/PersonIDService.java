@@ -9,7 +9,7 @@ import requestAndResult.PersonIDResult;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
 public class PersonIDService {
     PersonIDResult personIDResult = new PersonIDResult();
@@ -17,20 +17,24 @@ public class PersonIDService {
 
     public PersonIDResult load(String authToken, String personID) throws DataAccessException, SQLException {
         try {
+            db.openConnection();
+            Connection conn = db.getConnection();
             if (authToken != null || authToken != "") {
-                db.openConnection();
+
                 System.out.println("Start personID handler");
-                Connection conn = db.getConnection();
+
                 AuthTokenDao authTokenDao = new AuthTokenDao(conn);
                 PersonDao personDao = new PersonDao(conn);
 
                 //authToken to username
                 String username = authTokenDao.getUserbyTokens(authToken);
                 //print out all associated usernames
-                List<Person> personList = personDao.findallPersons(username);
-                Person[] tmpPersons = personList.toArray(new Person[personList.size()]);
-                for (Person person : tmpPersons) {
-                    if (person.getPersonID().equals(personID.toString())) {
+                ArrayList<Person> personList = personDao.findallPersons(username);
+                Person temp = null;
+                for (Person person : personList) {
+
+                    if (person.getPersonID().equals(personID)) {
+                        temp = person;
                         personIDResult.setAssociatedUsername(person.getAssociatedUsername());
                         personIDResult.setPersonID(person.getPersonID());
                         personIDResult.setFirstName(person.getFirstName());
@@ -52,10 +56,15 @@ public class PersonIDService {
                         personIDResult.setMessage(null);
                         db.closeConnection(true);
                         break;
-                    }else{
-                        personIDResult.setMessage("Error:[Requested person does not belong to this user]");
-                        personIDResult.setSuccess(false);
                     }
+                }
+                if(temp != null)
+                {
+                    db.closeConnection(true);
+                }else{
+                    personIDResult.setMessage("Error:[Requested person does not belong to this user]");
+                    personIDResult.setSuccess(false);
+                    db.closeConnection(false);
                 }
             } else if (personID.equals("")|| personID == null) {
                 personIDResult.setMessage("Error:[Invalid personID parameter]");

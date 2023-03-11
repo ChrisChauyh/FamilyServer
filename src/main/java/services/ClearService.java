@@ -21,7 +21,6 @@ public class ClearService {
             new EventDao(conn).clear();
             new UserDao(conn).clear();
             new AuthTokenDao(conn).clearToken();
-            db.closeConnection(true);
             clearResult.setMessage("Clear succeeded.");
             clearResult.setSuccess(true);
         } catch (SQLException | DataAccessException e) {
@@ -30,6 +29,7 @@ public class ClearService {
             clearResult.setSuccess(false);
             db.closeConnection(false);
         } finally {
+            db.closeConnection(true);
             return clearResult;
         }
 
