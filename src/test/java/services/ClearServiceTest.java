@@ -53,5 +53,16 @@ class ClearServiceTest {
         ClearResult clearResult =clearService.clear();
         assertEquals(true,clearResult.getSuccess());
     }
+    @Test
+    public void ClearServiceTestPositive2() throws DataAccessException, SQLException, InterruptedException {
+        ClearService clearService = new ClearService();
+        ClearResult clearResult = clearService.clear();
+        assertEquals(true,clearResult.getSuccess());
+        clearResult.setSuccess(null);
+        clearResult.setMessage(null);
+        setup();
+        clearResult = clearService.clear();
+        assertEquals(true,clearResult.getSuccess());
+    }
 
 }
