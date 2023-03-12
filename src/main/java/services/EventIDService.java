@@ -18,7 +18,7 @@ public class EventIDService {
             db.openConnection();
             System.out.println("Start eventID handler");
             Connection conn = db.getConnection();
-            if (authToken != null || authToken != "") {
+            if (authToken != null && !authToken.equals("")) {
 
                 AuthTokenDao authTokenDao = new AuthTokenDao(conn);
                 EventDao eventDao = new EventDao(conn);
@@ -53,21 +53,25 @@ public class EventIDService {
                     db.closeConnection(false);
                 }
 
-            } else if (eventID == "") {
+            } else if (authToken == "" || authToken == null) {
                 eventIDResult.setMessage("Error:[Invalid eventID parameter]");
                 eventIDResult.setSuccess(false);
                 db.closeConnection(false);
+                throw new SQLException("Error[eventID is null]");
             } else {
                 eventIDResult.setMessage("Error:[Invalid auth token]");
                 eventIDResult.setSuccess(false);
                 db.closeConnection(false);
             }
         } catch (DataAccessException e) {
-            eventIDResult.setMessage("Error:[" + e + "]");
+            eventIDResult.setMessage("Error:[Invalid auth token]");
+            eventIDResult.setSuccess(false);
+            db.closeConnection(false);
+        }catch (SQLException e) {
+            eventIDResult.setMessage("Error:[Internal server error]");
             eventIDResult.setSuccess(false);
             db.closeConnection(false);
         }
-
         // Close the database connection
         finally {
             return eventIDResult;

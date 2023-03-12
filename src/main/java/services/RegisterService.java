@@ -6,6 +6,7 @@ import requestAndResult.RegisterRequest;
 import requestAndResult.RegisterResult;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -36,6 +37,13 @@ public class RegisterService {
             Connection conn = db.getConnection();
             AuthTokenDao authTokenDao = new AuthTokenDao(conn);
             UserDao userDao = new UserDao(conn);
+            String[] fields = {"username", "password", "gender", "email", "firstName", "lastName"};
+            for (String field : fields) {
+                if (getField(request, field) == null ||getField(request, field) == "" ) {
+                    throw new Exception("Error[Request property missing or has invalid value]");
+                }
+            }
+
             //create authtoken and a new user
             if (!userDao.validateUsername(request.getUsername())) {
                 User user = new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getFirstName(), request.getLastName(), request.getGender(), UUID.randomUUID().toString());
@@ -60,10 +68,23 @@ public class RegisterService {
             registerResult.setMessage("Error:[Internal server error]");
             registerResult.setSuccess(false);
             db.closeConnection(false);
-        } finally {
+        }catch(Exception e) {
+            registerResult.setMessage(e.getMessage());
+            registerResult.setSuccess(false);
+            db.closeConnection(false);
+        }finally
+         {
             return registerResult;
         }
 
     }
-
+    private Object getField(Object object, String fieldName) {
+        try {
+            Field field = object.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(object);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

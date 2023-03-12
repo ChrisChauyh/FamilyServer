@@ -26,6 +26,10 @@ public class EventService {
 
                 //print out all associated usernames
                 ArrayList<Event> eventList = eventDao.findallEvents(username);
+                if(eventList.size()<1)
+                {
+                    throw new Exception("Error:[Internal server error]");
+                }
             if(authToken == null || authToken ==""|| username == null || username =="")
             {
                 throw new DataAccessException("Invalid auth token");
@@ -36,7 +40,13 @@ public class EventService {
             }
         } catch (DataAccessException e) {
             e.printStackTrace();
-            eventResult.setMessage("Error:[" + e +"]");
+            eventResult.setMessage("Error:[Invalid auth token]");
+            eventResult.setSuccess(false);
+            db.closeConnection(false);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            eventResult.setMessage(e.getMessage());
             eventResult.setSuccess(false);
             db.closeConnection(false);
         } finally {

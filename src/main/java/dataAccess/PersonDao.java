@@ -35,29 +35,6 @@ public class PersonDao {
         }
 
     }
-//    String findPersonIDbyUsername(String username) throws DataAccessException
-//    {
-//        ResultSet rs;
-//        String sql = "SELECT * FROM Person WHERE username = ?;";
-//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-//            stmt.setString(1, username);
-//            rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                person = new Person(rs.getString("personID"),
-//                        rs.getString("associatedUsername"),rs.getString("firstName"),
-//                        rs.getString("lastName"),rs.getString("gender"),
-//                        rs.getString("fatherID"),rs.getString("motherID"),rs.getString("spouseID"));
-//                return person;
-//            } else {
-//                throw new SQLException();
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw new DataAccessException("Error encountered while finding the username in the database");
-//        }
-//    }
-
-
 
     public void changerootPerson(String newID, String firstname, String lastname, String oldID) throws DataAccessException {
         String sql = "UPDATE Person SET personID = ?, firstName = ? , lastName = ? WHERE personID = ? ;";

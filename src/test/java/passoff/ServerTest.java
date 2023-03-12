@@ -411,7 +411,7 @@ public class ServerTest {
             //We are calling the get single event api with an eventID of "Sheila_Asteroids" (we are using the authtoken variable from loginResult on the previous line)
             EventResult eventResult = proxy.event(host, port, loginResult.getAuthtoken(), ASTEROIDS1_EVENT_ID);
             //This is a valid api call, so the headers sent should be HTTP_OK (200)
-                assertHTTP_OK();
+            assertHTTP_OK();
             //Checks to make sure eventResult has information for an Event [OR] in the case that there isn't, that there is no error message String
             Assertions.assertTrue(eventResult.getMessage() == null || !eventResult.getMessage().toLowerCase().contains("error"), "Result contains an error message");
             //Checks to make sure eventResult has the same information for the "Sheila_Asteroids" Event as it is listed in loadRequest

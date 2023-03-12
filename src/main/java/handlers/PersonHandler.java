@@ -72,12 +72,10 @@ public class PersonHandler implements HttpHandler {
                     }
                 }
             }
-        } catch (IOException | DataAccessException e) {
+        } catch (IOException | DataAccessException| RuntimeException | SQLException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             exchange.getResponseBody().close();
             e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 }

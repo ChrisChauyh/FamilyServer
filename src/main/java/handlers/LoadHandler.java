@@ -8,7 +8,9 @@ import requestAndResult.LoadRequest;
 import requestAndResult.LoadResult;
 import services.LoadService;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.sql.SQLException;
 
@@ -33,6 +35,7 @@ public class LoadHandler implements HttpHandler {
                     LoadRequest request = gson.fromJson(reqData, LoadRequest.class);
                     LoadService service = new LoadService();
                     LoadResult result = service.load(request);
+
 
                     if (result.getSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

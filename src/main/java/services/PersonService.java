@@ -29,6 +29,10 @@ public class PersonService {
 
                 //print out all associated usernames
                 ArrayList<Person> personList = personDao.findallPersons(username);
+                if(personList.size()<1)
+                {
+                    throw new Exception("Error:[Internal server error]");
+                }
             if(authToken == null || authToken ==""|| username == null || username =="")
             {
                throw new DataAccessException("Invalid auth token");
@@ -42,7 +46,14 @@ public class PersonService {
             personResult.setMessage("Error:[Invalid auth token]");
             personResult.setSuccess(false);
             db.closeConnection(false);
-        } finally {
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            personResult.setMessage(e.getMessage());
+            personResult.setSuccess(false);
+            db.closeConnection(false);
+
+        }finally {
             return personResult;
         }
     }

@@ -28,8 +28,8 @@ public class FillService {
     Mname mname = (Mname) readJson("src/main/java/json/mnames.json", Mname.class);
     Sname sname = (Sname) readJson("src/main/java/json/snames.json", Sname.class);
     LocationData locationData = (LocationData) readJson("src/main/java/json/locations.json", LocationData.class);
-    int personsAdded = 0;
-    int eventsAdded = 0;
+    int personsAdded ;
+    int eventsAdded ;
 
     int maxbirthDate = 13;
 
@@ -42,7 +42,8 @@ public class FillService {
  * Populates the server's database with generated data for the specified username. The required "username" parameter must be a user already registered with the server. If there is any data in the database already associated with the given username, it is deleted.
  * The optional "generations" parameter lets the caller specify the number of generations of ancestors to be generated, and must be a non-negative integer (the default is 4, which results in 31 new persons each with associated events).
  * More details can be found in the earlier section titled “Family History Information Generation”
- */
+ */     personsAdded =0;
+        eventsAdded =0;
         try {
             System.out.println("Start fill handler");
             db.openConnection();
@@ -50,6 +51,10 @@ public class FillService {
             PersonDao personDao = new PersonDao(conn);
             EventDao eventDao = new EventDao(conn);
             UserDao userDao = new UserDao(conn);
+            if(username == null || gens == null || username == "")
+            {
+                throw new NullPointerException("Invalid username or generations parameter");
+            }
             //If there is any data in the database already
             //associated with the given username, it is deleted.
             List<Person> existPersons = personDao.findallPersons(username);
@@ -78,11 +83,21 @@ public class FillService {
             fillResult.setMessage("Successfully added " + personsAdded + " persons and " + eventsAdded + " events to the database.");
             fillResult.setSuccess(true);
         } catch (DataAccessException | SQLException e) {
-            fillResult.setMessage("Error:[" + e + "]");
+            fillResult.setMessage("Error:[Wrong username or generations parameter]");
             fillResult.setSuccess(false);
             db.closeConnection(false);
-        } finally {
-            db.closeConnection(true);
+        }
+        catch(NullPointerException e){
+            fillResult.setMessage("Error:[" + e.getMessage() + "]");
+            fillResult.setSuccess(false);
+            db.closeConnection(false);
+        }finally {
+            if(fillResult.getSuccess())
+            {
+                db.closeConnection(true);
+            }else if(db.getConnection() != null){
+                db.closeConnection(false);
+            }
             return fillResult;
         }
 

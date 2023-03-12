@@ -26,7 +26,7 @@ public class LoginService {
 
             if(userDao.validateUsername(curUser.getUsername())){
                 String tempToken = authTokenDao.generateToken(request.getUsername());
-                String tempUsername = authTokenDao.getUserbyTokens(tempToken).toLowerCase();
+                String tempUsername = authTokenDao.getUserbyTokens(tempToken);
                 User tempuser = userDao.find(request.getUsername());
                 if(tempUsername.equals(request.getUsername().toString()) && tempuser.getPassword().equals(request.getPassword().toString()))
                 {

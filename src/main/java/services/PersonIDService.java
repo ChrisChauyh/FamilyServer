@@ -19,7 +19,7 @@ public class PersonIDService {
         try {
             db.openConnection();
             Connection conn = db.getConnection();
-            if (authToken != null || authToken != "") {
+            if (authToken != null || authToken != ""||personID!= ""|| personID != null) {
 
                 System.out.println("Start personID handler");
 
@@ -66,7 +66,7 @@ public class PersonIDService {
                     personIDResult.setSuccess(false);
                     db.closeConnection(false);
                 }
-            } else if (personID.equals("")|| personID == null) {
+            }if (personID.equals("")|| personID == null) {
                 personIDResult.setMessage("Error:[Invalid personID parameter]");
                 personIDResult.setSuccess(false);
                 db.closeConnection(false);
