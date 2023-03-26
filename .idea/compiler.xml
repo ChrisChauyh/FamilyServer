@@ -7,7 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="FamilyMapServerStudent" />
+        <module name="shared" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="FamilyMapServerStudent" target="11" />
+      <module name="shared" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
